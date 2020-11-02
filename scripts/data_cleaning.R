@@ -29,6 +29,6 @@ clean_data <- all_data %>%
          end_station_id, end_station_name, end_station_latitude, end_station_longitude,
          start_station_description, end_station_description)
 
-write_csv(clean_data, "clean_data/clean_data.csv")
+# write_csv(clean_data, "clean_data/clean_data.csv")
 
-rm(all_data, clean_data, files)
+rm(all_data, files)

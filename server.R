@@ -294,7 +294,7 @@ server <- function(input, output) {
     hours_value <- reactive_data() %>%
       summarise(total_hours = round(sum(hours)))
     
-    hours_valuef <- comma(hours_value$total_hours)
+    hours_valuef <- scales::comma(hours_value$total_hours)
     
     infoBox(
       " ", value = paste(hours_valuef, 
@@ -308,7 +308,7 @@ server <- function(input, output) {
     trips_value <- reactive_data() %>%
       nrow()
     
-    trips_valuef <- comma(trips_value)
+    trips_valuef <- scales::comma(trips_value)
     
     infoBox(
       " ", value = paste(trips_valuef, 

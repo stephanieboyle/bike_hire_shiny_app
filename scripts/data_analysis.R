@@ -5,7 +5,7 @@ library(lubridate)
 #-------------------------------------------------
 # load in the data
 #-------------------------------------------------
-all_data <- read_csv("clean_data/clean_data.csv") %>%
+all_data <- clean_data %>%
   arrange(year, month, date) %>%
   select(-c(started_at, ended_at))
 

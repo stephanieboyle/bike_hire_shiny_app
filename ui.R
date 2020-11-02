@@ -6,7 +6,6 @@ library(shinythemes)
 library(tidyverse)
 library(dashboardthemes)
 
-
 # Define UI  ----
 ui <- dashboardPage(
   
@@ -55,8 +54,6 @@ ui <- dashboardPage(
      
      infoBoxOutput("days_active")
    )
-
-   
 )
 )
 
