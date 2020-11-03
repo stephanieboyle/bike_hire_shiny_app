@@ -1,13 +1,3 @@
-library(tidyverse)
-library(leaflet)
-library(lubridate)
-
-# #-------------------------------------------------
-# # load in the data
-# #-------------------------------------------------
-# all_data <- clean_data %>%
-#   select(-c(started_at, ended_at))
-
 
 #-------------------------------------------------
 ## distinct stations
