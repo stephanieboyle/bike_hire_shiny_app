@@ -27,7 +27,8 @@ clean_data <- all_data %>%
   select(year, month, month_label, date, day, weekday, weekday_label, mins, hours, seconds, started_at, ended_at, 
          start_station_id, start_station_name, start_station_latitude, start_station_longitude,
          end_station_id, end_station_name, end_station_latitude, end_station_longitude,
-         start_station_description, end_station_description)
+         start_station_description, end_station_description) %>%
+  arrange(date)
 
 # write_csv(clean_data, "clean_data/clean_data.csv")
 

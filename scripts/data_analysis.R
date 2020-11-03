@@ -2,18 +2,17 @@ library(tidyverse)
 library(leaflet)
 library(lubridate)
 
-#-------------------------------------------------
-# load in the data
-#-------------------------------------------------
-all_data <- clean_data %>%
-  arrange(year, month, date) %>%
-  select(-c(started_at, ended_at))
+# #-------------------------------------------------
+# # load in the data
+# #-------------------------------------------------
+# all_data <- clean_data %>%
+#   select(-c(started_at, ended_at))
 
 
 #-------------------------------------------------
 ## distinct stations
 #-------------------------------------------------
-all_stations <- all_data %>% 
+all_stations <- clean_data %>% 
   pivot_longer(cols = c(start_station_name, end_station_name),
                names_to = "position",
                values_to = "station_name") %>%
@@ -37,10 +36,10 @@ stations <- all_stations %>%
 # MONTHLY ANALYSIS ----------------
 #----------------------------------
 
-date1 = "2018-09-16"
-date2 = "2019-08-24"
+date1 = "2018-09-15"
+date2 = "2020-11-01"
 
-reactive_data <- all_data %>%
+reactive_data <- clean_data %>%
   filter(date >= date1 & date <= date2)
 
 # # reactive data 
