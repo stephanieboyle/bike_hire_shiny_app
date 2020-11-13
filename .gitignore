@@ -116,4 +116,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# big files
+* .csv
+
 # End of https://www.gitignore.io/api/r,linux,macos,windows

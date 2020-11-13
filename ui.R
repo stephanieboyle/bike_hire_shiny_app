@@ -25,7 +25,6 @@ ui <- dashboardPage(
                 choices = c("Number of journeys","Hours spent cycling")),
    
    br(), 
-
             leafletOutput("big_map")
 
    # 

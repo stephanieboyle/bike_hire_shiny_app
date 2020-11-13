@@ -33,3 +33,24 @@ clean_data <- all_data %>%
 # write_csv(clean_data, "clean_data/clean_data.csv")
 
 rm(all_data, files)
+
+
+#-------------------------------------------------
+## distinct stations
+#-------------------------------------------------
+all_stations <- clean_data %>% 
+  pivot_longer(cols = c(start_station_name, end_station_name),
+               names_to = "position",
+               values_to = "station_name") %>%
+  pivot_longer(cols = c(start_station_latitude, end_station_latitude),
+               names_to = "lat_position",
+               values_to = "latitude") %>%
+  pivot_longer(cols = c(start_station_longitude, end_station_longitude),
+               names_to = "long_position",
+               values_to = "longitude") %>%
+  select(station_name, longitude, latitude) 
+
+stations <- all_stations %>%
+  subset(!duplicated(station_name))
+
+write.csv(stations, "clean_data/stations.csv")
