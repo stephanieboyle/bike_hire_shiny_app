@@ -57,3 +57,48 @@ output$logo <- renderImage({
   return(list(src = "images/JE_New_Logo.png",contentType = "image/png",alt = "Alignment",width = 230,
               height = 225))
 }, deleteFile = FALSE)
+
+
+
+
+
+# make a map which has most popular start and stop stations in different colours
+output$start_map <- renderLeaflet({
+  start_map <- start_stations %>%
+    select(station_name, longitude, latitude) %>%
+    rename(start_station_name = station_name, 
+           start_long = longitude, 
+           start_lat = latitude)
+  
+  
+  icons.start <- makeAwesomeIcon(icon = 'bicycle', 
+                                 markerColor = 'green', 
+                                 library='fa',
+                                 iconColor = 'black')
+  
+  leaflet(start_map) %>% 
+    setView(lng = -3.1883, lat = 55.9533, zoom = 12)%>%
+    addTiles() %>%
+    addAwesomeMarkers(lng = ~start_long, lat = ~start_lat, icon = icons.start)
+})
+
+
+
+output$end_map <- renderLeaflet({
+  end_map <- end_stations %>%
+    select(station_name, longitude, latitude) %>%
+    rename(end_station_name = station_name, 
+           end_long = longitude, 
+           end_lat = latitude)
+  
+  icons.end <- makeAwesomeIcon(icon = 'bicycle', 
+                               markerColor = 'red', 
+                               library='fa',
+                               iconColor = 'black')
+  
+  leaflet(end_map) %>% 
+    setView(lng = -3.1883, lat = 55.9533, zoom = 12)%>%
+    addTiles() %>%
+    addAwesomeMarkers(lng = ~end_long, lat = ~end_lat, icon = icons.end)
+  
+})

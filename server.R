@@ -97,8 +97,6 @@ server <- function(input, output) {
   })
 
 
-
-
   # total month hours plots
  output$total_time_plot <- renderPlot({
    ggplot(total_hours()) +
@@ -170,18 +168,6 @@ server <- function(input, output) {
   # make a map for all stations
   output$big_map <- renderLeaflet({
     
-    start_map <- start_stations() %>%
-      select(station_name, longitude, latitude) %>%
-      rename(start_station_name = station_name, 
-             start_long = longitude, 
-             start_lat = latitude)
-    
-    end_map <- end_stations() %>%
-      select(station_name, longitude, latitude) %>%
-      rename(end_station_name = station_name, 
-             end_long = longitude, 
-             end_lat = latitude)
-    
     icons.all <- awesomeIcons(
       icon = 'bicycle',
       iconColor = 'black',
@@ -190,41 +176,11 @@ server <- function(input, output) {
     leaflet(stations) %>% 
     setView(lng = -3.1883, lat = 55.9533, zoom = 12)%>%
     addTiles() %>%
-    addAwesomeMarkers(lng = ~longitude, lat = ~latitude, icon = icons.all)
+    addAwesomeMarkers(lng = ~longitude, lat = ~latitude, icon = icons.all,
+                      label = ~as.character(station_name))
   })
   
   
-  
-  # make a map which has most popular start and stop stations in different colours
-  output$start_map <- renderLeaflet({
-    
-    icons.start <- makeAwesomeIcon(icon = 'bicycle', 
-                                   markerColor = 'green', 
-                                   library='fa',
-                                   iconColor = 'black')
-
-    leaflet(start_map) %>% 
-      setView(lng = -3.1883, lat = 55.9533, zoom = 12)%>%
-      addTiles() %>%
-      addAwesomeMarkers(lng = ~start_long, lat = ~start_lat, icon = icons.start)
-  })
-
-  
-  
-  output$end_map <- renderLeaflet({
-    
-    icons.end <- makeAwesomeIcon(icon = 'bicycle', 
-                                 markerColor = 'red', 
-                                 library='fa',
-                                 iconColor = 'black')
-    
-    leaflet(end_map) %>% 
-      setView(lng = -3.1883, lat = 55.9533, zoom = 12)%>%
-      addTiles() %>%
-      addAwesomeMarkers(lng = ~end_long, lat = ~end_lat, icon = icons.end)
-    
-  })
-
 
   
   
