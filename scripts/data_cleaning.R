@@ -30,10 +30,8 @@ clean_data <- all_data %>%
          start_station_description, end_station_description) %>%
   arrange(date)
 
-# write_csv(clean_data, "clean_data/clean_data.csv")
 
 rm(all_data, files)
-
 
 #-------------------------------------------------
 ## distinct stations
@@ -53,4 +51,5 @@ all_stations <- clean_data %>%
 stations <- all_stations %>%
   subset(!duplicated(station_name))
 
-write.csv(stations, "clean_data/stations.csv")
+write.csv(clean_data, "clean_data/clean_data.csv", row.names = FALSE)
+write.csv(stations, "clean_data/stations.csv", row.names = FALSE)
