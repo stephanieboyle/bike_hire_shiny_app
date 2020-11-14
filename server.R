@@ -6,160 +6,10 @@ source("global.R")
 #---------------------------------------------
 server <- function(input, output) {
   
-  # ---- reactive data ----- #
-  reactive_data <- reactive({
-    clean_data %>%
-    filter(date >= input$dateRange[1] & date <= input$dateRange[2])
-  })
-
   
-  # ---- date range ---- # 
-  output$dateRangeText  <- renderText({
-    paste("input$dateRange is", 
-          paste(as.character(input$dateRange), collapse = " to ")
-    )
-  })
-  
-  
-
-  #----------- TOTAL JOURNEY ANALYSIS --------------#
-  # total hours by month
-  total_hours <- reactive({
-    reactive_data() %>%
-    group_by(year, month, month_label) %>%
-    summarise(total_mins = sum(mins), 
-              total_hours = total_mins/60) %>%
-    arrange(year, month) %>% 
-    mutate(year_label = as.character(year), 
-           date = make_date(year,month)) %>% 
-    unite(col = "label", 
-          c("month_label", "year_label"), 
-          sep = "-")
-  })
-  
-  # total journeys by month
-  total_journey_month <- reactive({ 
-    reactive_data() %>%
-      group_by(year, month, month_label) %>%
-      summarise(total_count = n()) %>%
-      arrange(year, month) %>% 
-      mutate(year_label = as.character(year), 
-             date = make_date(year,month)) %>% 
-      unite(col = "label", 
-            c("month_label", "year_label"), 
-            sep = "-")
-    })
-
-  total_journeys <- reactive({
-    reactive_data() %>%
-      group_by(year, month, month_label, weekday, weekday_label) %>%
-      summarise(total_count = n()) %>%
-      arrange(year, month) %>% 
-      mutate(year_label = as.character(year), 
-             date = make_date(year,month)) %>% 
-      unite(col = "label", 
-            c("month_label", "year_label"), 
-            sep = "-")
-  })
-
-  
-  #-------------------------------------------------
-  ## PLOTS
-  #-------------------------------------------------
-  
-  output$totals_plot <- renderPlot({
-    
-    if(input$metrics == "Number of journeys"){
-      ggplot(total_journey_month()) +
-        aes(x = date, y = total_count) %>%
-        geom_col(fill = "#E3112B") +
-        scale_x_date(date_labels = "%b-%Y", date_breaks = "1 month") +
-        theme(axis.text.x=element_text(angle=60, hjust=1)) +
-        xlab("") + ylab("total count \n")  +
-        ggtitle("\n Total number of monthly journeys taken")
-      
-
-   }else{
-    
-     ggplot(total_hours()) +
-       aes(x = date, y = total_hours) %>%
-       geom_col(fill = "#E3112B") +
-       scale_x_date(date_labels = "%b-%Y", date_breaks = "1 month") + 
-       theme(axis.text.x=element_text(angle=60, hjust=1)) + 
-       xlab("") + ylab("total hours \n")  + 
-       ggtitle("\n Total number of monthly hours spent cycling")
-     
-   }
-  })
-
-
-  # total month hours plots
- output$total_time_plot <- renderPlot({
-   ggplot(total_hours()) +
-     aes(x = date, y = total_hours) %>%
-     geom_col(fill = "#E3112B") +
-     scale_x_date(date_labels = "%b-%Y", date_breaks = "1 month") + 
-     theme(axis.text.x=element_text(angle=60, hjust=1)) + 
-     xlab("") + ylab("total hours \n")  + 
-     ggtitle("Total hours spent cycling of Just Eat bikes")
-   
- }) 
-  
-  # total month journey plots
-  output$total_journey_plot <- renderPlot({
-  ggplot(total_journey_month()) +
-    aes(x = date, y = total_count) %>%
-    geom_col(fill = "#DAA520") +
-    scale_x_date(date_labels = "%b-%Y", date_breaks = "1 month") + 
-    theme(axis.text.x=element_text(angle=60, hjust=1)) + 
-    xlab("") + ylab("total count \n")  + 
-    ggtitle("Total number of monthly journeys taken")
-  })
-  
-  
-  # most popular day of the week TIME SPENT
-  output$weekday_hours_plot <- renderPlot({
-  ggplot(weekday_hours()) + 
-    aes(x = reorder(weekday_label,weekday), y = pop_hours) + 
-    geom_col(fill = "#E3112B") +
-    theme(axis.text.x=element_text(angle=60, hjust=1)) + 
-    xlab("") + ylab("total hours \n")  + 
-    ggtitle("Total hours spent by weekday")
-  })
-  
-  # most popular day of the week 
-  output$weekday_pop_plot <- renderPlot({
-  ggplot(weekday_pop()) + 
-    aes(x = reorder(weekday_label,weekday), y = pop) + 
-    geom_col(fill = "#DAA520") +
-    theme(axis.text.x=element_text(angle=60, hjust=1)) + 
-    xlab("") + ylab("total journey count \n")  + 
-    ggtitle("Total number of journeys by weekday")
-  })
-  
-  
-  # most used start station
-  output$start_station_plot <- renderPlot({
-  ggplot(start_stations()) + 
-    aes(x = reorder(station_name, desc(total_count)), total_count) + 
-    geom_col(fill = "yellowgreen") +
-    theme(axis.text.x=element_text(angle=60, hjust=1)) + 
-    xlab("") + ylab("number of times used \n")  + 
-    ggtitle("Most popular start stations")
-  })
-  
-  # most used end station
-  output$end_station_plot <- renderPlot({
-  ggplot(end_stations()) + 
-    aes(x = reorder(station_name, desc(total_count)), total_count) + 
-    geom_col(fill = "#E3112B") +
-    theme(axis.text.x=element_text(angle=60, hjust=1)) + 
-    xlab("") + ylab("number of times used \n")  + 
-    ggtitle("Most popular end stations")
-  })
-  
-  
-  
+  #--------------------------------------------------------------------------------
+  # INTRO TAB
+  #--------------------------------------------------------------------------------
   
   # make a map for all stations
   output$big_map <- renderLeaflet({
@@ -170,60 +20,122 @@ server <- function(input, output) {
       library = 'fa')
     
     leaflet(stations) %>% 
-    setView(lng = -3.1883, lat = 55.9533, zoom = 12)%>%
-    addTiles() %>%
-    addAwesomeMarkers(lng = ~longitude, lat = ~latitude, icon = icons.all,
-                      label = ~as.character(station_name))
+      setView(lng = -3.1883, lat = 55.9533, zoom = 12)%>%
+      addTiles() %>%
+      addAwesomeMarkers(lng = ~longitude, lat = ~latitude, icon = icons.all,
+                        label = ~as.character(station_name))
   })
   
   
+  
+  #--------------------------------------------------------------------------------
+  # OVERVIEW TAB
+  #-------------------------------------------------------------------------------
+  
+  #----------- TOTAL JOURNEY ANALYSIS --------------#
+  # total hours by month
+  total_hours <- clean_data %>%
+    group_by(year, month, month_label) %>%
+    summarise(total_mins = sum(mins), 
+              total_hours = total_mins/60) %>%
+    arrange(year, month) %>% 
+    mutate(year_label = as.character(year), 
+           date = make_date(year,month)) %>% 
+    unite(col = "label", 
+          c("month_label", "year_label"), 
+          sep = "-")
+  
+  # total journeys by month
+  total_journey_month <- clean_data %>%
+      group_by(year, month, month_label) %>%
+      summarise(total_count = n()) %>%
+      arrange(year, month) %>% 
+      mutate(year_label = as.character(year), 
+             date = make_date(year,month)) %>% 
+      unite(col = "label", 
+            c("month_label", "year_label"), 
+            sep = "-")
+
+
+  output$totals_plot <- renderPlot({
+    if(input$metrics == "Number of journeys"){
+      ggplot(total_journey_month) +
+        aes(x = date, y = total_count) %>%
+        geom_col(fill = "#0D87D5") +
+        scale_x_date(date_labels = "%b-%Y", date_breaks = "1 month") +
+        theme(axis.text.x=element_text(angle=60, hjust=1)) +
+        xlab("") + ylab("  \n")  +
+        ggtitle("\n Total number of monthly journeys taken")+ 
+        scale_y_continuous(labels=function(x) format(x, big.mark = ",", scientific = FALSE))
+   }else{
+     ggplot(total_hours) +
+       aes(x = date, y = total_hours) %>%
+       geom_col(fill = "#0D87D5") +
+       scale_x_date(date_labels = "%b-%Y", date_breaks = "1 month") + 
+       theme(axis.text.x=element_text(angle=60, hjust=1)) + 
+       xlab("") + ylab("  \n")  + 
+       ggtitle("\n Total number of monthly hours spent cycling") + 
+       scale_y_continuous(labels=function(x) format(x, big.mark = ",", scientific = FALSE))
+   }
+  })
 
   
-  
+
   output$total_hours_spent<- renderInfoBox({
-    
-    hours_value <- reactive_data() %>%
+    hours_value <-clean_data %>%
       summarise(total_hours = round(sum(hours)))
-    
-    hours_valuef <- scales::comma(hours_value$total_hours)
-    
-    infoBox(
-      " ", value = paste(hours_valuef, 
-                                            " hours spent cycling"
-      ),
-      icon = icon("clock"), color = "blue"
+      hours_valuef <- scales::comma(hours_value$total_hours)
+      infoBox(" ",
+            value = paste(hours_valuef,
+                          " hours spent cycling"),
+      icon = icon("clock"), color = "orange"
     )
   })
   
   output$total_trips <- renderInfoBox({
-    trips_value <- reactive_data() %>%
+    trips_value <- clean_data %>%
       nrow()
-    
-    trips_valuef <- scales::comma(trips_value)
-    
-    infoBox(
-      " ", value = paste(trips_valuef, 
-                                  " trips made by bike"
-      ),
-      icon = icon("map"), color = "green"
-    )
+      trips_valuef <- scales::comma(trips_value)
+      infoBox(
+        " ",
+        value = paste(trips_valuef, 
+        " trips made by bike"),
+      icon = icon("map"), color = "green")
   })
   
   
   output$days_active <- renderInfoBox({
-    days_active <- reactive_data() %>%
+    days_active <- clean_data %>%
       group_by(date) %>%
       summarise(count = n()) %>%
       nrow()
-    
-    
     infoBox(
-      " ", value = paste(days_active, 
-                         " days in use"
-      ),
-      icon = icon("calendar"), color = "yellow"
+      " ", 
+      value = paste(days_active, 
+      " days in use"),
+      icon = icon("calendar"), color = "purple")
+  })
+  
+  
+  
+  
+  #--------------------------------------------------------------------------------
+  # MONTHLY BREAKDOWN TAB
+  #--------------------------------------------------------------------------------
+  # ---- date range input ---- # 
+  output$dateRangeText  <- renderText({
+    paste("input$dateRange is", 
+          paste(as.character(input$dateRange), collapse = " to ")
     )
   })
+  
+  
+  # ---- reactive data, output from date range ----- #
+  reactive_data <- reactive({
+    clean_data %>%
+      filter(date >= input$dateRange[1] & date <= input$dateRange[2])
+  })
+  
   
   
 } # end server

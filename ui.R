@@ -3,8 +3,10 @@ dashboardPage(
    dashboardSidebar(
       sidebarMenu(
          menuItem("Introduction", tabName = "intro", icon = icon("info-circle", lib = "font-awesome")),
-         menuItem("Overview", tabName = "overview", icon = icon("bicycle", lib = "font-awesome")),
-         menuItem("Details", tabName = "single", icon = icon("chart", lib = "font-awesome"))
+         menuItem("Overview", tabName = "overview", icon = icon("map", lib = "font-awesome")),
+         menuItem("Monthly breakdown", tabName = "monthly", icon = icon("calendar-alt", lib = "font-awesome")),
+         menuItem("Weekly breakdown", tabName = "weekly", icon = icon("calendar", lib = "font-awesome")), 
+         menuItem("Station Overview", tabName = "stations", icon = icon("bicycle", lib = "font-awesome"))
       )
    ),
    
@@ -57,41 +59,30 @@ dashboardPage(
             )
             ),
             
-            # fluidRow(
-            #    column(12,
-            #           tags$p("Please feel free to get in touch with any feedback or comments. You can contact me at the following places:"),
-            #           tags$div(
-            #              tags$ul(
-            #                 tags$li("Email: stephanie.boyle9@gmail.com"),
-            #                 tags$li("Twitter: ", tags$a("here", href = "https://twitter.com/_stephanieboyle")),
-            #                 tags$li("LinkedIn: ", tags$a("here", href = "https://www.linkedin.com/in/stephanieboyle9/")) 
-            #              )))
-            # )
-
       tabItem(
          "overview",
          
          
       fluidRow(h4("  ")),
       
+      
       fluidRow(
-         column(1,
+         infoBoxOutput("total_hours_spent"),
+         infoBoxOutput("total_trips"), 
+         infoBoxOutput("days_active")
+      ),
+      
+      fluidRow(
+         column(4,
                 " "), 
          
-         column(4, 
-                # date range selector
-                dateRangeInput('dateRange',
-                               label = 'Pick your date range:',
-                               start = "2018-09-15", end = "2020-08-24", format = "yyyy-mm-dd")
-                ),
-         column(2,
-                ""),
          column(5,
-                  radioButtons("metrics", 
-                   "Select metric",
-                   choices = c("Number of journeys","Hours spent cycling"), 
-                   inline = TRUE)
+                radioButtons("metrics", 
+                             " ",
+                             choices = c("Number of journeys","Hours spent cycling"), 
+                             inline = TRUE)
          ),
+         column(3, " ")
       ),
       
       fluidRow(
@@ -99,14 +90,9 @@ dashboardPage(
                 plotOutput("totals_plot")
          )
       ),
-      
-      br(),
-      
-      fluidRow(
-         infoBoxOutput("total_hours_spent"),
-         infoBoxOutput("total_trips"), 
-         infoBoxOutput("days_active")
-      )
+   
+      br()
+
      )
    )
  )
