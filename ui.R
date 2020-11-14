@@ -73,27 +73,48 @@ dashboardPage(
       ),
       
       fluidRow(
-         column(4,
-                " "), 
-         
-         column(5,
-                radioButtons("metrics", 
-                             " ",
-                             choices = c("Number of journeys","Hours spent cycling"), 
-                             inline = TRUE)
-         ),
-         column(3, " ")
-      ),
-      
-      fluidRow(
          column(12,
                 plotOutput("totals_plot")
          )
       ),
-   
-      br()
+      br(),
+      
+      fluidRow(
+         column(2,
+                " "), 
 
-     )
+         column(4,
+                radioButtons("metrics", 
+                             "Choose your metric",
+                             choices = c("Number of journeys","Hours spent cycling"), 
+                             selected = "Number of journeys", 
+                             inline = TRUE)
+         ),
+            column(4,
+                   dateRangeInput('dateRange',
+                                  label = paste('Pick your date range'),
+                                  start = "2018-09-15", end = "2020-11-10",
+                                  min = "2018-09-14", max = "2020-11-11",
+                                  separator = " - ", format = "dd/mm/yy"),
+            ),
+            
+         column(2, " ")
+      ),
+
+      br()
+     ),
+     
+     tabItem(
+        "monthly",
+          
+        fluidRow(
+           column(12,
+                  plotOutput("monthly_plot")
+           )
+        ),
+        
+        br()
+      ) 
    )
  )
 )

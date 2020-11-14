@@ -2,24 +2,42 @@
 
 
 #-------------------------------------------------
-## summary data
+## monthly data
 #-------------------------------------------------
 
-#----------------------------------
-# MONTHLY ANALYSIS ----------------
-#----------------------------------
+total_month_year <- clean_data %>%
+  group_by(year, month) %>%
+  summarise(total_mins = sum(mins), 
+            total_hours = total_mins/60, 
+            total_count = n()) %>%
+  mutate(month_label = month(month, label = TRUE, abbr = TRUE))
 
-date1 = "2018-09-15"
-date2 = "2020-11-01"
+total_month <- clean_data %>%
+  group_by(month) %>%
+  summarise(total_mins = sum(mins), 
+            total_hours = total_mins/60, 
+            total_count = n()) %>%
+  mutate(month_label = month(month, label = TRUE, abbr = TRUE))
 
-reactive_data <- clean_data %>%
-  filter(date >= date1 & date <= date2)
 
-# # reactive data 
-# reactive_data <- reactive({
-#   all_data %>%
-#     filter(date >= input$dates[1] & date <= input$dates[2])
-# })
+# total month hours plots
+ggplot(total_month) +
+  aes(x = month_label, y = total_count) %>%
+  geom_col(fill = "#E3112B") +
+  theme(axis.text.x=element_text(angle=60, hjust=1)) + 
+  xlab("") + ylab("total count \n") 
+
+ggplot(total_month) +
+  aes(x = month_label, y = total_hours) %>%
+  geom_col(fill = "#E3112B") +
+  theme(axis.text.x=element_text(angle=60, hjust=1)) + 
+  xlab("") + ylab("total hours \n") 
+
+
+
+
+
+
 
 
 # total hours by month

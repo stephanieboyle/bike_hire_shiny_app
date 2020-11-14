@@ -32,9 +32,17 @@ server <- function(input, output) {
   # OVERVIEW TAB
   #-------------------------------------------------------------------------------
   
+  # ---- reactive data, output from date range ----- #
+  reactive_data <- reactive({
+    clean_data %>%
+      filter(date >= input$dateRange[1] & date <= input$dateRange[2])
+  })
+  
+  
   #----------- TOTAL JOURNEY ANALYSIS --------------#
   # total hours by month
-  total_hours <- clean_data %>%
+  total_hours <- reactive({ 
+    reactive_data() %>%
     group_by(year, month, month_label) %>%
     summarise(total_mins = sum(mins), 
               total_hours = total_mins/60) %>%
@@ -44,9 +52,11 @@ server <- function(input, output) {
     unite(col = "label", 
           c("month_label", "year_label"), 
           sep = "-")
+  })
   
   # total journeys by month
-  total_journey_month <- clean_data %>%
+  total_journey_month <- reactive({
+    reactive_data() %>%
       group_by(year, month, month_label) %>%
       summarise(total_count = n()) %>%
       arrange(year, month) %>% 
@@ -55,11 +65,11 @@ server <- function(input, output) {
       unite(col = "label", 
             c("month_label", "year_label"), 
             sep = "-")
-
+})
 
   output$totals_plot <- renderPlot({
     if(input$metrics == "Number of journeys"){
-      ggplot(total_journey_month) +
+      ggplot(total_journey_month()) +
         aes(x = date, y = total_count) %>%
         geom_col(fill = "#0D87D5") +
         scale_x_date(date_labels = "%b-%Y", date_breaks = "1 month") +
@@ -68,7 +78,7 @@ server <- function(input, output) {
         ggtitle("\n Total number of monthly journeys taken")+ 
         scale_y_continuous(labels=function(x) format(x, big.mark = ",", scientific = FALSE))
    }else{
-     ggplot(total_hours) +
+     ggplot(total_hours()) +
        aes(x = date, y = total_hours) %>%
        geom_col(fill = "#0D87D5") +
        scale_x_date(date_labels = "%b-%Y", date_breaks = "1 month") + 
@@ -82,7 +92,7 @@ server <- function(input, output) {
   
 
   output$total_hours_spent<- renderInfoBox({
-    hours_value <-clean_data %>%
+    hours_value <- reactive_data() %>%
       summarise(total_hours = round(sum(hours)))
       hours_valuef <- scales::comma(hours_value$total_hours)
       infoBox(" ",
@@ -93,7 +103,7 @@ server <- function(input, output) {
   })
   
   output$total_trips <- renderInfoBox({
-    trips_value <- clean_data %>%
+    trips_value <- reactive_data() %>%
       nrow()
       trips_valuef <- scales::comma(trips_value)
       infoBox(
@@ -105,7 +115,7 @@ server <- function(input, output) {
   
   
   output$days_active <- renderInfoBox({
-    days_active <- clean_data %>%
+    days_active <- reactive_data() %>%
       group_by(date) %>%
       summarise(count = n()) %>%
       nrow()
@@ -122,20 +132,8 @@ server <- function(input, output) {
   #--------------------------------------------------------------------------------
   # MONTHLY BREAKDOWN TAB
   #--------------------------------------------------------------------------------
-  # ---- date range input ---- # 
-  output$dateRangeText  <- renderText({
-    paste("input$dateRange is", 
-          paste(as.character(input$dateRange), collapse = " to ")
-    )
-  })
-  
-  
-  # ---- reactive data, output from date range ----- #
-  reactive_data <- reactive({
-    clean_data %>%
-      filter(date >= input$dateRange[1] & date <= input$dateRange[2])
-  })
-  
+
+ 
   
   
 } # end server
