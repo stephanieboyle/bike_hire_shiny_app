@@ -6,7 +6,7 @@ library(shinydashboard)
 library(lubridate)
 library(shinythemes)
 library(dashboardthemes)
-
+library(shinydashboardPlus)
 
 #-------------------------------------------------
 # load in the data

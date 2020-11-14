@@ -1,7 +1,3 @@
-library(tidyverse)
-library(leaflet)
-library(lubridate)
-
 source("global.R")
 
 
