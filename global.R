@@ -1,13 +1,37 @@
 library(tidyverse)
 library(leaflet)
 library(lubridate)
+library(janitor)
 
-#-------------------------------------------------
-# load in the data
-#-------------------------------------------------
-all_data <- read_csv("clean_data/clean_data.csv") %>%
+# get a list of files
+files <- list.files(path = "./raw_data/",
+                    pattern = "*.csv", 
+                    full.names = T) 
+
+# read in the files 
+all_files <- sapply(files, read_csv, simplify=FALSE) %>% 
+  bind_rows(.id = "id")
+
+# add in some more info about the dates and times 
+all_data <- all_files %>%
+  mutate(year = year(started_at), 
+         month = month(started_at),
+         month_label = month(started_at, label = TRUE, abbr = TRUE), 
+         day = day(started_at), 
+         date = date(started_at),
+         weekday = wday(started_at),
+         weekday_label = wday(started_at, label = TRUE),
+         am = am(started_at), 
+         mins = duration / 60, 
+         hours = mins / 3600, 
+         seconds = duration) %>%
+  select(year, month, month_label, date, day, weekday, weekday_label, mins, hours, seconds, started_at, ended_at, 
+         start_station_id, start_station_name, start_station_latitude, start_station_longitude,
+         end_station_id, end_station_name, end_station_latitude, end_station_longitude,
+         start_station_description, end_station_description) %>%
   arrange(year, month, date) %>%
   select(-c(started_at, ended_at))
+
 
 #-------------------------------------------------
 ## distinct stations

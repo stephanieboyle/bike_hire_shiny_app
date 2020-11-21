@@ -1,7 +1,7 @@
 library(tidyverse)
 library(leaflet)
 library(lubridate)
-
+library(scales)
 source("global.R")
 
 
@@ -137,7 +137,7 @@ server <- function(input, output) {
     if(input$metrics == "Number of journeys"){
       ggplot(total_journey_month()) +
         aes(x = date, y = total_count) %>%
-        geom_col(fill = "#E3112B") +
+        geom_col(fill = "#072D79") +
         scale_x_date(date_labels = "%b-%Y", date_breaks = "1 month") +
         theme(axis.text.x=element_text(angle=60, hjust=1)) +
         xlab("") + ylab("total count \n")  +
@@ -148,7 +148,7 @@ server <- function(input, output) {
     
      ggplot(total_hours()) +
        aes(x = date, y = total_hours) %>%
-       geom_col(fill = "#E3112B") +
+       geom_col(fill = "#072D79") +
        scale_x_date(date_labels = "%b-%Y", date_breaks = "1 month") + 
        theme(axis.text.x=element_text(angle=60, hjust=1)) + 
        xlab("") + ylab("total hours \n")  + 
