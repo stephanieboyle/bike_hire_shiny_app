@@ -117,6 +117,6 @@ $RECYCLE.BIN/
 *.lnk
 
 # big files
-*.csv
+*clean_data.csv
 
 # End of https://www.gitignore.io/api/r,linux,macos,windows
