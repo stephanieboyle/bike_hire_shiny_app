@@ -12,7 +12,7 @@ library(scales)
 #-------------------------------------------------
 # load in the data
 #-------------------------------------------------
-#source("scripts/data_analysis.R")
+source("scripts/data_cleaning.R")
 
 source("scripts/data_cleaning.R")
 

@@ -93,8 +93,8 @@ dashboardPage(
             column(4,
                    dateRangeInput('dateRange',
                                   label = paste('Pick your date range'),
-                                  start = "2018-09-15", end = "2020-11-10",
-                                  min = "2018-09-14", max = "2020-11-11",
+                                  start = "2018-09-15", end = "2021-01-10",
+                                  min = "2018-09-14", max = "2021-01-11",
                                   separator = " - ", format = "dd/mm/yy"),
             ),
             
