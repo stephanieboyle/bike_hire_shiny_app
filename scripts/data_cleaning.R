@@ -1,12 +1,14 @@
 library(tidyverse)
 library(lubridate)
 library(janitor)
+library(here)
 
 # get a list of files
-files <- list.files(path = "./raw_data/",
+files <- list.files(path = here("./raw_data/"),
                     pattern = "*.csv", 
                     full.names = T) 
 
+test <- read_csv("raw_data/")
 # read in the files 
 all_data <- sapply(files, read_csv, simplify=FALSE) %>% 
   bind_rows(.id = "id")
