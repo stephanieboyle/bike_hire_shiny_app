@@ -130,10 +130,110 @@ server <- function(input, output) {
 
 
   #--------------------------------------------------------------------------------
-  # MONTHLY BREAKDOWN TAB
+  #  BREAKDOWN TAB
   #--------------------------------------------------------------------------------
 
+  output$top_months <- renderPlot({
+    
+    if(input$metrics_breakdown == "Number of journeys"){
+    # total month hours plots
+    ggplot(total_month) +
+      aes(x = reorder(month_label, desc(total_count)), y = total_count) %>%
+      geom_col(fill = "#FF8C00") +
+      theme(axis.text.x=element_text(angle=60, hjust=1)) + 
+      xlab("") + ylab("total journey count \n") +
+        ggtitle("Most popular month of the year \n")
+    }else{
+    ggplot(total_month) +
+      aes(x = reorder(month_label, desc(total_hours)), y = total_hours) %>%
+      geom_col(fill = "#FF8C00") +
+      theme(axis.text.x=element_text(angle=60, hjust=1)) + 
+      xlab("") + ylab("total hours \n") + 
+        ggtitle("Most popular month of the year \n")
+    }
+  })
+  
+  
+  
+  output$top_weekday <- renderPlot({
+    
+    if(input$metrics_breakdown == "Number of journeys"){
+      # most popular day of the week 
+      ggplot(weekday_pop) + 
+        aes(x = reorder(weekday_label, desc(pop)), y = pop) + 
+        geom_col(fill = "#FF8C00") +
+        theme(axis.text.x=element_text(angle=60, hjust=1)) + 
+        xlab("") + ylab("total journey count \n")  + 
+        ggtitle("Most popular day of the week \n")
+    }else{
+    # most popular day of the week TIME SPENT
+    ggplot(weekday_hours) + 
+      aes(x = reorder(weekday_label, desc(pop_hours)), y = pop_hours) + 
+      geom_col(fill = "#FF8C00") +
+      theme(axis.text.x=element_text(angle=60, hjust=1)) + 
+      xlab("") + ylab("total hours \n")  + 
+      ggtitle("Most popular day of the week \n")
+    }
+  })
+  
+  
+  
+  
+  #--------------------------------------------------------------------------------
+  # STATION BREAKDOWN TAB
+  #--------------------------------------------------------------------------------
+  
+    output$start_stations <- renderPlot({ 
+      # most used start station
+        ggplot(start_stations) +
+        aes(x = reorder(station_name, desc(total_count)), total_count) +
+        geom_col(fill = "yellowgreen") +
+        theme(axis.text.x=element_text(angle=60, hjust=1)) +
+        xlab("") + ylab("number of times used \n")  +
+        ggtitle("Most popular start stations \n")
+      })
 
 
+  output$end_stations <- renderPlot({
+    # most used end station
+    ggplot(end_stations) +
+      aes(x = reorder(station_name, desc(total_count)), total_count) +
+      geom_col(fill = "#E3112B") +
+      theme(axis.text.x=element_text(angle=60, hjust=1)) +
+      xlab("") + ylab("number of times used \n")  +
+      ggtitle("Most popular end stations \n")
+  })
+  
 
+  # make a map for all stations
+  output$start_map <- renderLeaflet({
+    
+  icons.start <- makeAwesomeIcon(icon = 'bicycle',
+                                 markerColor = 'green',
+                                 library='fa',
+                                 iconColor = 'black')
+  
+  # make a map which has most popular start and stop stations in different colours
+  leaflet(start_map) %>% 
+    setView(lng = -3.1883, lat = 55.9533, zoom = 12)%>%
+    addTiles() %>%
+    addAwesomeMarkers(lng = ~start_long, lat = ~start_lat, icon = icons.start, 
+                      label = ~as.character(start_station_name))
+  
+  })
+  
+  output$end_map <- renderLeaflet({
+    icons.end <- makeAwesomeIcon(icon = 'bicycle',
+                                 markerColor = 'red',
+                                 library='fa',
+                                 iconColor = 'black')
+    
+    leaflet(end_map) %>% 
+      setView(lng = -3.1883, lat = 55.9533, zoom = 12)%>%
+      addTiles() %>%
+      addAwesomeMarkers(lng = ~end_long, lat = ~end_lat, icon = icons.end, 
+                        label = ~as.character(end_station_name))
+    
+  })
+  
 } # end server

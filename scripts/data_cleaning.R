@@ -1,6 +1,7 @@
 library(tidyverse)
 library(lubridate)
 library(janitor)
+library(here)
 
 # get a list of files
 files <- list.files(path = "./raw_data/",
