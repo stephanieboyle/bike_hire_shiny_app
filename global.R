@@ -8,6 +8,7 @@ library(shinythemes)
 library(dashboardthemes)
 library(shinydashboardPlus)
 library(scales)
+library(DT)
 
 #-------------------------------------------------
 # load in the data

@@ -105,6 +105,24 @@ dashboardPage(
      
      tabItem(
         "monthly",
+        
+        fluidRow(
+          column(4,
+                 " ",
+          ),
+          column(5,
+                 radioButtons("metrics_breakdown", 
+                              "     Choose your metric",
+                              choices = c("Number of journeys","Hours spent cycling"), 
+                              selected = "Number of journeys", 
+                              inline = TRUE)
+          ),
+          column(3,
+                 " ",
+          )
+        ),
+        
+        br(), 
           
         fluidRow(
            column(6,
@@ -114,24 +132,23 @@ dashboardPage(
                   plotOutput("top_weekday")
                   )
         ),
+        
         br(),
+        
         fluidRow(
-           column(4,
-                  " ",
-                  ),
-           column(5,
-                  radioButtons("metrics_breakdown", 
-                               " ",
-                               choices = c("Number of journeys","Hours spent cycling"), 
-                               selected = "Number of journeys", 
-                               inline = TRUE)
-           ),
-           column(3,
-                  " ",
-           )
+          
+          br(),
+          column(12, 
+                 
+          tags$p("The table below contains all the monthly information: total hours spent cycling, and total number of journeys.", 
+        )),
+        br(),
         ),
         
-        br()
+        fluidRow(
+          column(12, 
+                 DT::dataTableOutput("totals_table"))
+        )
       ), 
      
      tabItem(

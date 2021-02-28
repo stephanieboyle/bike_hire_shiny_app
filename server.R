@@ -151,6 +151,12 @@ server <- function(input, output) {
   })
   
   
+  output$totals_table = DT::renderDataTable({
+    total_month_year %>%
+      select(month_label, year, total_hours, total_count) %>%
+      rename(month = month_label) %>%
+      mutate(total_hours = round(total_hours))
+  })
   
   output$top_weekday <- renderPlot({
     
