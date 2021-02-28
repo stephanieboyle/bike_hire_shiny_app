@@ -12,7 +12,9 @@ library(scales)
 #-------------------------------------------------
 # load in the data
 #-------------------------------------------------
+
 clean_data <- read_csv("clean_data/clean_data.csv")
+stations <- read_csv("clean_data/stations.csv")
 
 #-------------------------------------------------
 # source the files for plots
