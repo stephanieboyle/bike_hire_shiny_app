@@ -1,0 +1,12 @@
+name: edinburgh_bike_hire_data_app
+title: edinburgh_bike_hire_data_app
+username:
+account: stephanie-boyle
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3833003
+bundleId: 4380624
+url: https://stephanie-boyle.shinyapps.io/edinburgh_bike_hire_data_app/
+when: 1616428482.91373
+asMultiple: FALSE
+asStatic: FALSE
