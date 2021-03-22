@@ -1,5 +1,12 @@
 ## Edinburgh Bike Hire Data App
 
+<br><br>
+
+<center>
+![](images/logo.png)
+</center>
+
+<br><br>
 
 You can access the full app here: [stephanie-boyle.shinyapps.io/](https://stephanie-boyle.shinyapps.io/edinburgh_bike_hire_data_app/)
 
@@ -7,6 +14,8 @@ This app allows exploration and visualisation of data from the Just Eat Cycles h
 
 
 [The data can be found here](https://edinburghcyclehire.com/open-data/historical)
+
+<br>
 
 
 ## What's in the App?
@@ -39,10 +48,11 @@ On this tab, you can view the data by month or weekday. You can again choose bet
 On this final tab, you can see the top start and end stations, as well as their locations. 
 
 
-
+<br><br>
 
 
 ## Data Details 
+
 
 All code can be found on github: [https://github.com/stephanieboyle/bike_hire_shiny_app](https://github.com/stephanieboyle/bike_hire_shiny_app)
 
@@ -50,6 +60,8 @@ The data can be found here: [https://edinburghcyclehire.com/open-data](https://e
 
 The data dictionary for the variables is listed below:
 ![](images/data_dictionary.png)
+
+<br>
 
 
 Date: 22/03/2021   
