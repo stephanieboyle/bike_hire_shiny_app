@@ -9,6 +9,7 @@ library(dashboardthemes)
 library(shinydashboardPlus)
 library(scales)
 library(DT)
+library(rsconnect)
 
 #-------------------------------------------------
 # load in the data
