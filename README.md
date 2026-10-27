@@ -2,6 +2,20 @@
 
 An R Shiny dashboard for exploring historical Just Eat Cycles journeys in Edinburgh.
 
+**[Explore the live app →](https://01a17ed9-b528-1005-8629-8f2a5fc4c55c.share.connect.posit.cloud/)** · [Run it locally](#run-locally) · [How the data is prepared](#data-preparation)
+
+![The updated Edinburgh Bike Hire Data Explorer running on Posit Connect Cloud](images/app-live.png)
+
+Explore **369,731 journeys across 171 stations**, covering September 2018 to February 2021. Choose a date range, compare journeys with hours spent cycling, and see which stations people used.
+
+| Explore | What you'll find |
+|---|---|
+| Overview | Journeys and cycling hours for a selected date range. |
+| Breakdown | Patterns by month and weekday, plus a data table. |
+| Stations | Popular start/end stations and their locations on a map. |
+
+The screenshot above shows the updated deployment. The original screenshots further down are kept as a record of the first version.
+
 ## Project status
 
 This is a historical data project. The original project recorded its last data refresh as February 2021; this maintenance pass fixes the preparation code, not the data's recency. It does not fetch live journeys.
@@ -130,4 +144,4 @@ The data dictionary for the variables is listed below:
 
 
 Date: 22/03/2021
-Author: [Stephanie Boyle](https://twitter.com/_stephanieboyle)
+Author: [Stephanie Boyle](https://stephanieboyle.github.io/)
