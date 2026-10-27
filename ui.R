@@ -96,7 +96,7 @@ dashboardPage(
                                   label = paste('Pick your date range'),
                                   start = min(clean_data$date), end = max(clean_data$date),
                                   min = min(clean_data$date), max = max(clean_data$date),
-                                  separator = " - ", format = "dd/mm/yy"),
+                                  separator = " - ", format = "dd/mm/yyyy"),
             ),
 
          column(1, " ")

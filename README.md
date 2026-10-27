@@ -6,7 +6,7 @@ An R Shiny dashboard for exploring historical Just Eat Cycles journeys in Edinbu
 
 This is a historical data project. The original project recorded its last data refresh as February 2021; this maintenance pass fixes the preparation code, not the data's recency. It does not fetch live journeys.
 
-The [original hosted app](https://stephanie-boyle.shinyapps.io/edinburgh_bike_hire_data_app/) may run a different revision. Repository changes do not redeploy it.
+[Open the repaired app](https://01a17ed9-b528-1005-8629-8f2a5fc4c55c.share.connect.posit.cloud/), hosted on the free Posit Connect Cloud plan. The original shinyapps.io deployment is a separate, older version. Repository changes do not automatically redeploy the app.
 
 ## Run locally
 
@@ -42,6 +42,12 @@ renv::load()
 source("scripts/data_cleaning.R")
 shiny::runApp(".")
 ```
+
+## Publishing updates
+
+The app uses `app.R` as its entry point on Posit Connect Cloud. To publish from R, install `rsconnect` and authorize your free Connect Cloud account with `rsconnect::connectCloudUser()`. Prepare the data first, then deploy with `appPrimaryDoc = "app.R"`, `appMode = "shiny"`, and an explicit `appFiles` list that includes `clean_data/clean_data.csv` (which is intentionally excluded from Git). Include the runtime files `app.R`, `global.R`, `ui.R`, `server.R`, `renv.lock`, `clean_data/stations.csv`, and the station, map and breakdown scripts.
+
+Use the existing content ID `01a17ed9-b528-1005-8629-8f2a5fc4c55c` when updating this deployment. Uploading creates or updates the public app; committing to GitHub alone does not. Keep deployment credentials outside the repository.
 
 ## Data preparation
 
