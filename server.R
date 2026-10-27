@@ -1,10 +1,8 @@
-source("global.R")
-
 
 #---------------------------------------------
 # define the server
 #---------------------------------------------
-server <- function(input, output) {
+server <- function(input, output, session) {
 
   #--------------------------------------------------------------------------------
   # INTRO TAB
@@ -33,6 +31,7 @@ server <- function(input, output) {
 
   # ---- reactive data, output from date range ----- #
   reactive_data <- reactive({
+    req(input$dateRange, length(input$dateRange) == 2L)
     clean_data %>%
       filter(date >= input$dateRange[1] & date <= input$dateRange[2])
   })
@@ -67,9 +66,10 @@ server <- function(input, output) {
 })
 
   output$totals_plot <- renderPlot({
+    validate(need(nrow(reactive_data()) > 0L, "No journeys in this date range. Choose another range."))
     if(input$metrics == "Number of journeys"){
       ggplot(total_journey_month()) +
-        aes(x = date, y = total_count) %>%
+        aes(x = date, y = total_count) +
         geom_col(fill = "#0D87D5") +
         scale_x_date(date_labels = "%b-%Y", date_breaks = "1 month") +
         theme(axis.text.x=element_text(angle=60, hjust=1)) +
@@ -78,7 +78,7 @@ server <- function(input, output) {
         scale_y_continuous(labels=function(x) format(x, big.mark = ",", scientific = FALSE))
    }else{
      ggplot(total_hours()) +
-       aes(x = date, y = total_hours) %>%
+       aes(x = date, y = total_hours) +
        geom_col(fill = "#0D87D5") +
        scale_x_date(date_labels = "%b-%Y", date_breaks = "1 month") +
        theme(axis.text.x=element_text(angle=60, hjust=1)) +
@@ -135,14 +135,14 @@ server <- function(input, output) {
     if(input$metrics_breakdown == "Number of journeys"){
     # total month hours plots
     ggplot(total_month) +
-      aes(x = reorder(month_label, desc(total_count)), y = total_count) %>%
+      aes(x = reorder(month_label, desc(total_count)), y = total_count) +
       geom_col(fill = "#FF8C00") +
       theme(axis.text.x=element_text(angle=60, hjust=1)) + 
       xlab("") + ylab("total journey count \n") +
         ggtitle("Most popular month of the year \n")
     }else{
     ggplot(total_month) +
-      aes(x = reorder(month_label, desc(total_hours)), y = total_hours) %>%
+      aes(x = reorder(month_label, desc(total_hours)), y = total_hours) +
       geom_col(fill = "#FF8C00") +
       theme(axis.text.x=element_text(angle=60, hjust=1)) + 
       xlab("") + ylab("total hours \n") + 
