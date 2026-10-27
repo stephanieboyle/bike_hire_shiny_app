@@ -1,22 +1,22 @@
 library(tidyverse)
 library(leaflet)
-library(shinyWidgets)
 library(shiny)
 library(shinydashboard)
 library(lubridate)
-library(shinythemes)
-library(dashboardthemes)
 library(shinydashboardPlus)
 library(scales)
 library(DT)
-library(rsconnect)
 
 #-------------------------------------------------
 # load in the data
 #-------------------------------------------------
 
-clean_data <- read_csv("clean_data/clean_data.csv")
-stations <- read_csv("clean_data/stations.csv")
+if (!file.exists("clean_data/clean_data.csv") ||
+    !file.exists("clean_data/stations.csv")) {
+  stop("Prepared data is missing. Run Rscript scripts/data_cleaning.R from the repository root first.")
+}
+clean_data <- read_csv("clean_data/clean_data.csv", show_col_types = FALSE)
+stations <- read_csv("clean_data/stations.csv", show_col_types = FALSE)
 
 #-------------------------------------------------
 # source the files for plots
